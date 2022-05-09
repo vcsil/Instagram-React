@@ -1,5 +1,16 @@
 import React from "react";
 
+const listaPost  = [["meowed", "img/gato-telefone.svg"   , "respondeai"      , "101.523"], 
+                    ["barked", "img/dog.svg", "adorable_animals", "99.159"]];
+
+const listaHeart = ["heart-outline", "heart-sharp"]
+const listaCor   = ["md hydrated", "vermelho md hydrated"]
+
+let likes = [];
+for (let i = 0; i < listaPost.length; i++) {
+    likes.push(0);
+}
+
 function Topo(props) {
     return (
         <div class="topo">
@@ -21,16 +32,16 @@ function Conteudo(props) {
 
     return (
         <div class="conteudo">
-            <img src={props.hrefMidia} alt={description} />
+            <img src={props.hrefMidia} alt={description} onClick={props.acao}/>
         </div>
     );
 }
 
-function Acoes() {
+function Acoes(props) {
     return (
         <div class="acoes">
             <div>
-                <ion-icon name="heart-outline"></ion-icon>
+                <ion-icon name={props.heart} onClick={props.acao} class={props.cor} id={"coracao"+props.id} ></ion-icon>
                 <ion-icon name="chatbubble-outline"></ion-icon>
                 <ion-icon name="paper-plane-outline"></ion-icon>
             </div>
@@ -57,7 +68,7 @@ function Curtidas(props) {
 function Fundo(props) {
     return (
         <div class="fundo">
-            <Acoes />
+            <Acoes heart={props.heart} acao={props.acao} cor={props.heartCor} id={props.index} />
             <Curtidas hrefFundo={props.hrefFundo} userFundo={props.userFundo} likes={props.likes} />
         </div>
 
@@ -65,25 +76,45 @@ function Fundo(props) {
 }
 
 function Post(props) {
+    const userPerfil  = "assets/img/" + props.user + ".svg";
+    const userMidia   = "assets/" + props.userMidia;
+    const fundoPerfil = "assets/img/" + props.userFundo + ".svg";
+
     return (
         <div class="post">
-            <Topo hrefPerfil={props.hrefPerfil} userPerfil={props.userPerfil} />
-            <Conteudo hrefMidia={props.hrefMidia} userPerfil={props.userPerfil} />
-            <Fundo hrefFundo={props.hrefFundo} userFundo={props.hrefFundo} likes={props.hrefFundo} />
+            <Topo hrefPerfil={userPerfil} userPerfil={props.user} />
+            <Conteudo hrefMidia={userMidia} userPerfil={props.user} acao={props.acao1} />
+            <Fundo hrefFundo={fundoPerfil} userFundo={props.userFundo} likes={props.likes} 
+                   heart={props.heart} heartCor={props.heartCor} acao={props.acao2} 
+                   index={props.index} />
         </div>
     );
 }
 
+
 export default function Posts() {
+    // Logica
+    const [like, setLike] = React.useState(0);
+
+    function likedMidia () {
+        console.log(1, "curtiu")
+        like === 0 ? setLike(like + 1) : setLike(like)
+    }
+
+    function likedHeart () {
+        console.log(2, "curtiu descurtiu")
+        like === 1 ? setLike(like - 1) : setLike(like + 1)
+    }
+
+
+    // UI
     return (
         <div class="posts">
-            <Post hrefPerfil="assets/img/meowed.svg" userPerfil="meowed"
-                hrefMidia="assets/img/gato-telefone.svg"
-                hrefFundo="assets/img/respondeai.svg" userFundo="respondeai" likes="101.523" />
-
-            <Post hrefPerfil="assets/img/barked.svg" userPerfil="barked"
-                hrefMidia="assets/img/dog.svg"
-                hrefFundo="assets/img/adorable_animals.svg" userFundo="adorable_animals" likes="99.159" />
+            {listaPost.map((post, index) => (
+                <Post user={post[0]} userMidia={post[1]} userFundo={post[2]} likes={post[3]} 
+                      heart={listaHeart[like]} acao1={likedMidia} acao2={likedHeart} 
+                      heartCor={listaCor[like]} index={index} />
+            ))}
         </div>
     );
 }

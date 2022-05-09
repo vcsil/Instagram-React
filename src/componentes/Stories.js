@@ -1,10 +1,15 @@
 import React from "react";
 
+const listaStories = ["9gag", "meowed", "barked", "nathanwpylestrangeplanet", "wawawicomics",
+    "respondeai", "filomoderna", "memeriagourmet"];
+
 function Story(props) {
+    const href = "assets/img/" + props.follow + ".svg"
+
     return (
         <div class="story">
             <div class="imagem">
-                <img src={props.href} alt={props.follow} />
+                <img src={href} alt={props.follow} />
             </div>
             <div class="usuario"> {props.follow} </div>
         </div>
@@ -14,19 +19,12 @@ function Story(props) {
 
 export default function Stories() {
     return (
-    <div class="stories">
-        <Story href="assets/img/9gag.svg" follow="9gag" />
-        <Story href="assets/img/meowed.svg" follow="meowed" />
-        <Story href="assets/img/barked.svg" follow="barked" />
-        <Story href="assets/img/nathanwpylestrangeplanet.svg" follow="nathanwpylestrangeplanet" />
-        <Story href="assets/img/wawawicomics.svg" follow="wawawicomics" />
-        <Story href="assets/img/respondeai.svg" follow="respondeai" />
-        <Story href="assets/img/filomoderna.svg" follow="filomoderna" />
-        <Story href="assets/img/memeriagourmet.svg" follow="memeriagourmet" />
+        <div class="stories">
+            {listaStories.map((name) => (<Story follow={name} />))}
 
-        <div class="setinha">
-            <ion-icon name="chevron-forward-circle"></ion-icon>
+            <div class="setinha">
+                <ion-icon name="chevron-forward-circle"></ion-icon>
+            </div>
         </div>
-    </div>
     );
 }

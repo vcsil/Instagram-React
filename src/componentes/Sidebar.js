@@ -1,9 +1,19 @@
 import React from "react";
 
+const listaUser = [["catanacomics", "Catana"]];
+
+const listaSugestoes = [["bad.vibes.memes", "Segue você"],
+["chibirdart", "Segue você"],
+["razoesparaacreditar", "Novo no Instagram"],
+["adorable_animals", "Segue você"],
+["smallcutecats", "Segue você"]];
+
 function Usuario(props) {
+    const hrefUser = "assets/img/" + props.user + ".svg"
+
     return (
         <div class="usuario">
-            <img src={props.hrefUser} alt={props.hrefUser} />
+            <img src={hrefUser} alt={props.user} />
             <div class="texto">
                 <strong>{props.user}</strong>
                 {props.userName}
@@ -13,12 +23,14 @@ function Usuario(props) {
 }
 
 function Sugestao(props) {
+    const hrefSugest = "assets/img/" + props.user + ".svg"
+
     return (
         <div class="sugestao">
             <div class="usuario">
-                <img src={props.hrefSugest} alt={props.userSugest} />
+                <img src={hrefSugest} alt={props.user} />
                 <div class="texto">
-                    <div class="nome">{props.userSugest}</div>
+                    <div class="nome">{props.user}</div>
                     <div class="razao">{props.info}</div>
                 </div>
             </div>
@@ -32,7 +44,9 @@ export default function Sidebar() {
     return (
 
         <div class="sidebar">
-            <Usuario hrefUser="assets/img/catanacomics.svg" user="catanacomics" userName="Catana" />
+            {listaUser.map((usuario) => (
+                <Usuario user={usuario[0]} userName={usuario[1]} />
+            ))}
 
             <div class="sugestoes">
                 <div class="titulo">
@@ -40,16 +54,9 @@ export default function Sidebar() {
                     <div>Ver tudo</div>
                 </div>
 
-                <Sugestao hrefSugest="assets/img/bad.vibes.memes.svg" userSugest="bad.vibes.memes"
-                          info="Segue você" />
-                <Sugestao hrefSugest="assets/img/chibirdart.svg" userSugest="chibirdart"
-                          info="Segue você" />
-                <Sugestao hrefSugest="assets/img/razoesparaacreditar.svg" userSugest="razoesparaacreditar"
-                          info="Segue você" />
-                <Sugestao hrefSugest="assets/img/adorable_animals.svg" userSugest="adorable_animals"
-                          info="Segue você" />
-                <Sugestao hrefSugest="assets/img/smallcutecats.svg" userSugest="smallcutecats"
-                          info="Segue você" />
+                {listaSugestoes.map((sugestao) => (
+                    <Sugestao user={sugestao[0]} info={sugestao[1]} />
+                ))}
             </div>
 
             <div class="links">
