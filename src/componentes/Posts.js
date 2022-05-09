@@ -1,7 +1,7 @@
 import React from "react";
 
-const listaPost  = [["meowed", "img/gato-telefone.svg"   , "respondeai"      , "101.523"], 
-                    ["barked", "img/dog.svg", "adorable_animals", "99.159"]];
+const listaPost  = [["meowed", "img/gato-telefone.svg"  , "respondeai"      , "101.523"], 
+                    ["barked", "img/dog.svg"            , "adorable_animals", "99.159" ]];
 
 const listaHeart = ["heart-outline", "heart-sharp"]
 const listaCor   = ["md hydrated", "vermelho md hydrated"]
@@ -41,7 +41,7 @@ function Acoes(props) {
     return (
         <div class="acoes">
             <div>
-                <ion-icon name={props.heart} onClick={props.acao} class={props.cor} id={"coracao"+props.id} ></ion-icon>
+                <ion-icon name={props.heart} onClick={props.acao} class={props.cor}></ion-icon>
                 <ion-icon name="chatbubble-outline"></ion-icon>
                 <ion-icon name="paper-plane-outline"></ion-icon>
             </div>
@@ -66,54 +66,68 @@ function Curtidas(props) {
 }
 
 function Fundo(props) {
+    let likes = (String(props.likes)).slice(0, (props.tamanho))
+
     return (
         <div class="fundo">
-            <Acoes heart={props.heart} acao={props.acao} cor={props.heartCor} id={props.index} />
-            <Curtidas hrefFundo={props.hrefFundo} userFundo={props.userFundo} likes={props.likes} />
+            <Acoes heart={props.heart} acao={props.acao} cor={props.heartCor} />
+            <Curtidas hrefFundo={props.hrefFundo} userFundo={props.userFundo} likes={likes} />
         </div>
 
     );
 }
 
 function Post(props) {
+    // Lógica
     const userPerfil  = "assets/img/" + props.user + ".svg";
     const userMidia   = "assets/" + props.userMidia;
     const fundoPerfil = "assets/img/" + props.userFundo + ".svg";
 
+    let tamanho = (props.likes).length
+
+    const [like, setLike] = React.useState(0);
+    const [nLikes, setNLikes] = React.useState(Number(props.likes))
+
+    function likedMidia () {
+        if (like === 0) {
+            setLike(1)
+            setNLikes(nLikes + 0.001)
+            console.log(1, nLikes)
+        }
+    }
+
+    function likedHeart () {
+        if (like === 1) {
+            setLike(0);
+            setNLikes(nLikes - 0.001)
+            console.log(5, likes)
+
+        } else {
+            setLike(1);
+            setNLikes(nLikes + 0.001)
+            console.log(5, likes)
+        }
+    }
+
+    //UI
     return (
         <div class="post">
             <Topo hrefPerfil={userPerfil} userPerfil={props.user} />
-            <Conteudo hrefMidia={userMidia} userPerfil={props.user} acao={props.acao1} />
-            <Fundo hrefFundo={fundoPerfil} userFundo={props.userFundo} likes={props.likes} 
-                   heart={props.heart} heartCor={props.heartCor} acao={props.acao2} 
-                   index={props.index} />
+            <Conteudo hrefMidia={userMidia} userPerfil={props.user} acao={likedMidia} />
+            <Fundo hrefFundo={fundoPerfil} userFundo={props.userFundo} likes={nLikes} 
+                   heart={listaHeart[like]} heartCor={listaCor[like]} acao={likedHeart} 
+                   tamanho={tamanho} />
         </div>
     );
 }
 
 
 export default function Posts() {
-    // Logica
-    const [like, setLike] = React.useState(0);
-
-    function likedMidia () {
-        console.log(1, "curtiu")
-        like === 0 ? setLike(like + 1) : setLike(like)
-    }
-
-    function likedHeart () {
-        console.log(2, "curtiu descurtiu")
-        like === 1 ? setLike(like - 1) : setLike(like + 1)
-    }
-
-
     // UI
     return (
         <div class="posts">
-            {listaPost.map((post, index) => (
-                <Post user={post[0]} userMidia={post[1]} userFundo={post[2]} likes={post[3]} 
-                      heart={listaHeart[like]} acao1={likedMidia} acao2={likedHeart} 
-                      heartCor={listaCor[like]} index={index} />
+            {listaPost.map((post) => (
+                <Post user={post[0]} userMidia={post[1]} userFundo={post[2]} likes={post[3]}  />
             ))}
         </div>
     );
